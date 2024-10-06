@@ -12,6 +12,3 @@ class Jobs(db.Model):
 
     def __repr__(self):
         return '<Jobs %r>' % self.id
-
-
-# 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
