@@ -1,3 +1,12 @@
+"""
+Validates the user profile data to ensure it meets the required structure and constraints.
+
+Args:
+    user_profile (dict): A dictionary containing the user's profile data.
+
+Returns:
+    None if all validations pass, otherwise a Flask JSON response with an error message and HTTP status code 400.
+"""
 from flask import jsonify
 from core.constants import constant
 

@@ -1,3 +1,10 @@
+"""
+Provides the main Flask application routes for the job recommendation service.
+
+The `ready()` function returns a JSON response indicating that the service is ready to receive requests.
+
+The `recommend_jobs()` function handles POST requests to the `/recommend_jobs` endpoint. It validates the incoming payload, fetches the ranked job listings based on the user profile, and returns a JSON response with the matching jobs or an error message.
+"""
 from core import app
 from flask import jsonify, request
 from core.logic import rank_jobs, payload_validation

@@ -1,3 +1,14 @@
+"""
+Fetches and ranks job listings based on a user's profile and skills.
+
+The `fetch_job_listings` function takes a user profile dictionary as input and returns a list of ranked job listings. It first retrieves the job listings from the database based on the user's skills, experience level, desired roles, locations, and job type. It then formats the job listings and ranks them based on the user's skills.
+
+The `format_job_profile` function takes a job profile object and returns a dictionary with the relevant job information, such as title, company, required skills, experience level, location, and job type.
+
+The `calculate_skill_match` function takes a list of user skills and a list of required skills for a job, and calculates the percentage of matching skills.
+
+The `rank_job_listings` function takes a list of formatted job listings and the user's skills, and returns a list of job listings sorted by the skill match score in descending order.
+"""
 from core.models.jobs import Jobs
 from core.constants import constant
 import json
