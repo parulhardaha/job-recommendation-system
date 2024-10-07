@@ -18,6 +18,7 @@ The `get_all_jobs` class method returns all job postings.
 from core import db
 from core.constants import constant
 from sqlalchemy.types import Enum as BaseEnum
+from sqlalchemy.exc import SQLAlchemyError
 
 class Jobs(db.Model):
     __tablename__ = 'jobs'
@@ -41,26 +42,43 @@ class Jobs(db.Model):
     def get_jobs(cls, _skills=None, _experience_level=None, _desired_roles=None, _locations=None, _job_type=None):
         # Create a list to hold all filter conditions
         filters = []
+        try:
 
-        # Filter by experience level
-        if _experience_level:
-            filters.append(cls.experience_level == _experience_level)
+            # Filter by experience level
+            if _experience_level:
+                filters.append(cls.experience_level == _experience_level)
 
-        # Filter by job type
-        if _job_type:
-            filters.append(cls.job_type == _job_type)
+            # Filter by job type
+            if _job_type:
+                filters.append(cls.job_type == _job_type)
 
-        # Filter by desired roles (titles)
-        if _desired_roles:
-            filters.append(cls.title.in_(_desired_roles))
+            # Filter by desired roles (titles)
+            if _desired_roles:
+                if not isinstance(_desired_roles, list):
+                    return {"error": "Desired roles must be a list."}, 400
+                filters.append(cls.title.in_(_desired_roles))
 
-        # Filter by locations
-        if _locations:
-            filters.append(cls.location.in_(_locations))
+            # Filter by locations
+            if _locations:
+                if not isinstance(_locations, list):
+                    return {"error": "Locations must be a list."}, 400
+                filters.append(cls.location.in_(_locations))
 
-        # Apply all filters using the filter method and return the result
-        return cls.filter(*filters).all()
+            # Apply all filters using the filter method and return the result
+            return cls.filter(*filters).all()
+
+        except SQLAlchemyError as e:
+            db.session.rollback()  # Rollback the session in case of error
+            return {"error": f"Database error occurred: {str(e)}"}, 500
+        except Exception as e:
+            return {"error": f"An unexpected error occurred: {str(e)}"}, 50
     
     @classmethod
     def get_all_jobs(cls):
-        return cls.query.all()
+        try:
+            return cls.query.all()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            return {"error": f"Database error occurred while fetching all jobs: {str(e)}"}, 500
+        except Exception as e:
+            return {"error": f"An unexpected error occurred: {str(e)}"}, 500

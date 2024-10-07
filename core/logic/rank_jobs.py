@@ -81,7 +81,7 @@ def rank_job_listings(job_list, user_skills):
 
         # Add the job and its match score to the recommendations
         job_with_score = job.copy()
-        job_with_score['skill_match_score'] = skill_match
+        job_with_score['skill_match_score'] = round(skill_match, 2)
         recommended_jobs.append(job_with_score)
 
     # Sort jobs by skill match score (highest first)

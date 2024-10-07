@@ -33,6 +33,7 @@ flask run
 ```
 
 ## Sample API
+### Request
 ```
 curl --location 'http://127.0.0.1:5000/recommend_jobs' \
 --header 'Content-Type: application/json' \
@@ -57,3 +58,46 @@ curl --location 'http://127.0.0.1:5000/recommend_jobs' \
     }
 }'
 ```
+### Response
+```
+{
+    "data": [
+        {
+            "company": "123 Tech",
+            "experience_level": "Senior",
+            "job_type": "Full-Time",
+            "location": "Remote",
+            "required_skills": [
+                "Java",
+                "Spring",
+                "Hibernate"
+            ],
+            "skill_match_score": 0.67,
+            "title": "Software Engineer"
+        },
+        {
+            "company": "ABC Corp",
+            "experience_level": "Senior",
+            "job_type": "Full-Time",
+            "location": "New York",
+            "required_skills": [
+                "Python",
+                "Flask",
+                "SQLAlchemy"
+            ],
+            "skill_match_score": 0.33,
+            "title": "Python Developer"
+        }
+    ],
+    "message": "Successfully fetched matching jobs"
+}
+```
+
+## Internal Job Ranking Logic
+
+* The heuristic algorithm primarily uses set operations to calculate how well the user's skills match the required skills for each job.
+* The jobs are then ranked by the percentage of skills matched, in descending order.
+* The matching for experience_level, job_type, location, and job_title happens in the SQL query, so the skills matching is done in the Python code
+
+## Detailed doc
+https://docs.google.com/document/d/1ukV2l8GKIeookZxQsqzJr1QKatwwxqJaj6vKqXddyqg/edit
