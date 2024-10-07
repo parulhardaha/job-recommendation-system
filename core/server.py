@@ -1,23 +1,21 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from sqlalchemy import event
-from sqlalchemy.engine import Engine
-from sqlite3 import Connection as SQLite3Connection
+from core import app
+from flask import jsonify, request
+from core.logic import fetch_jobs
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.sqlite3'
-app.config['SQLALCHEMY_ECHO'] = False
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+@app.route('/')
+def ready():
+    response = jsonify({
+        'status': 'ready'
+    })
 
-# this is to enforce fk (not done by default in sqlite3)
+    return response
 
-
-@event.listens_for(Engine, "connect")
-def _set_sqlite_pragma(dbapi_connection, connection_record):
-    if isinstance(dbapi_connection, SQLite3Connection):
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON;")
-        cursor.close()
+@app.route('/recommend_jobs', methods=['GET', 'POST'])
+def recommend_jobs():
+    if request.method == 'POST':
+        incoming_payload = request.get_json()
+        if incoming_payload is None:
+            return jsonify({"error": "Invalid payload"}), 400
+        ranked_jobs = fetch_jobs.fetch_job_listings(incoming_payload)
+        return jsonify({"message": "Successfully fetched matching jobs", "data": ranked_jobs}), 200
+    return jsonify({"message": "Send a POST request with job recommendation data."}), 200

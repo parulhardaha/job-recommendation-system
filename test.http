@@ -1,0 +1,22 @@
+curl --location 'http://127.0.0.1:5000/recommend_jobs' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Jane Doe",
+    "skills": [
+        "Python",
+        "Java",
+        "Hibernate"
+    ],
+    "experience_level": "Senior",
+    "preferences": {
+        "desired_roles": [
+            "Python Developer",
+            "Software Engineer"
+        ],
+        "locations": [
+            "Remote",
+            "New York"
+        ],
+        "job_type": "Full-Time"
+    }
+}'
