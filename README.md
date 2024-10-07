@@ -26,30 +26,44 @@ This project is a Flask-based job recommendation service that matches user profi
     cd job-recommendation-system
     ```
 
-2. Install the required dependencies using pip:
-    ```pip install -r requirements.txt```
+2. Install the required dependencies using pip:<br>
+    ```
+   pip install -r requirements.txt
+    ```
 
-3. Set Environment Variable
-    macOS/Linux:
-    Export the FLASK_APP environment variable:
-    ```export FLASK_APP=core/server.py```
+4. Set Environment Variable<br>
+    macOS/Linux:<br>
+    Export the FLASK_APP environment variable:<br>
+    ```
+   export FLASK_APP=core/server.py
+    ```
 
-    Windows:
-    For Windows, use the set command:
-    ```set FLASK_APP=core/server.py```
+    Windows:<br>
+    For Windows, use the set command:<br>
+    ```
+   set FLASK_APP=core/server.py
+    ```
 
-4. Reset the Database (Optional)
-    If you want to reset the database, remove the existing SQLite database file:
-    ```rm core/store.sqlite3```
-    On Windows, use the del command:
-    ```del core\store.sqlite3```
+6. Reset the Database (Optional)<br>
+    If you want to reset the database, remove the existing SQLite database file:<br>
+    ```
+       rm core/store.sqlite3
+    ```
+    On Windows, use the del command:<br>
+    ```
+   del core\store.sqlite3
+    ```
 
-5. Run Database Migrations
-    Run the migrations to create the necessary tables with sample rows in the database:
-    ```flask db upgrade -d core/migrations/```
+8. Run Database Migrations<br>
+    Run the migrations to create the necessary tables with sample rows in the database:<br>
+    ```
+   flask db upgrade -d core/migrations/
+    ```
 
-6. Run the Application
-    ```flask run```
+10. Run the Application
+    ```
+    flask run
+    ```
 
 ## Sample API
 ### Request
