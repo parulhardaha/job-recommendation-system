@@ -2,32 +2,44 @@ from core.models.jobs import Jobs
 from core.constants import constant
 import json
 
-def fetch_job_listings(user_profile):
-    print("user_profile", user_profile)
 
-    job_listings = Jobs.get_jobs(
-        _skills=user_profile['skills'],
-        _experience_level=constant.ExperienceLevelMapping[user_profile['experience_level']],
-        _desired_roles=user_profile['preferences']['desired_roles'],
-        _locations=user_profile['preferences']['locations'],
-        _job_type=constant.JobTypeMapping[user_profile['preferences']['job_type']]
-    )
-    
-    formatted_job_listings = [format_job_profile(job) for job in job_listings]
-    
-    return rank_job_listings(formatted_job_listings, user_profile['skills'])
-    
+def fetch_job_listings(user_profile):
+
+    try:
+        job_listings = Jobs.get_jobs(
+            _skills=user_profile['skills'],
+            _experience_level=constant.ExperienceLevelMapping[user_profile['experience_level']],
+            _desired_roles=user_profile['preferences']['desired_roles'],
+            _locations=user_profile['preferences']['locations'],
+            _job_type=constant.JobTypeMapping[user_profile['preferences']['job_type']]
+        )
+
+        if not job_listings:
+            return []
+
+        formatted_job_listings = [
+            format_job_profile(job) for job in job_listings]
+
+        return rank_job_listings(formatted_job_listings, user_profile['skills'])
+
+    except KeyError as e:
+        return {"error": f"Invalid user profile key: {str(e)}"}, 400
+    except Exception as e:
+        return {"error": f"An error occurred while fetching job listings: {str(e)}"}, 500
+
 
 def format_job_profile(job_profile):
-    return {
-        'title': job_profile.title,
-        'company': job_profile.company,
-        'required_skills': json.loads(job_profile.required_skills),
-        'experience_level': job_profile.experience_level,
-        'location': job_profile.location,
-        'job_type': job_profile.job_type
-    }
-    
+    try:
+        return {
+            'title': job_profile.title,
+            'company': job_profile.company,
+            'required_skills': json.loads(job_profile.required_skills),
+            'experience_level': job_profile.experience_level,
+            'location': job_profile.location,
+            'job_type': job_profile.job_type
+        }
+    except json.JSONDecodeError:
+        return {"error": "Error decoding job skills JSON."}, 500
 
 def calculate_skill_match(user_skills, required_skills):
     # Convert to sets for easier comparison
