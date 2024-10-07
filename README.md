@@ -8,7 +8,7 @@ This project is a Flask-based job recommendation service that matches user profi
 - User profile validation
 - Job listing ranking based on skill match
 - Database integration with SQLAlchemy
-- Alembic migrations for database schema management
+- Alembic migrations for putting the sample rows in the database
 
 ## Project Structure
 
@@ -20,17 +20,36 @@ This project is a Flask-based job recommendation service that matches user profi
 
 ## Setup and Running
 
-```
-git clone https://github.com/parulhardaha/job-recommendation-system.git
-cd job-recommendation-system
+1. Clone the repository to your local machine using Git:
+    ```
+    git clone https://github.com/parulhardaha/job-recommendation-system.git
+    cd job-recommendation-system
+    ```
 
-pip install -r requirements.txt
-export FLASK_APP=core/server.py
-rm core/store.sqlite3
-flask db upgrade -d core/migrations/
-flask run
+2. Install the required dependencies using pip:
+    ```pip install -r requirements.txt```
 
-```
+3. Set Environment Variable
+    macOS/Linux:
+    Export the FLASK_APP environment variable:
+    ```export FLASK_APP=core/server.py```
+
+    Windows:
+    For Windows, use the set command:
+    ```set FLASK_APP=core/server.py```
+
+4. Reset the Database (Optional)
+    If you want to reset the database, remove the existing SQLite database file:
+    ```rm core/store.sqlite3```
+    On Windows, use the del command:
+    ```del core\store.sqlite3```
+
+5. Run Database Migrations
+    Run the migrations to create the necessary tables with sample rows in the database:
+    ```flask db upgrade -d core/migrations/```
+
+6. Run the Application
+    ```flask run```
 
 ## Sample API
 ### Request
